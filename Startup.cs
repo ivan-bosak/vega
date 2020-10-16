@@ -25,9 +25,13 @@ namespace vega
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
+            
             services.AddDbContext<VegaDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
-            services.AddScoped<IRepository, VegaRepository>();    
+
+            services.AddScoped<IRepository, VegaRepository>();  
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

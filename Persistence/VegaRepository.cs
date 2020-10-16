@@ -24,5 +24,28 @@ namespace vega.Persistence
         {
             return await context.Features.ToListAsync();
         }
+
+        public async Task AddVehicle(Vehicle vehilce)
+        {
+            await context.Vehicles.AddAsync(vehilce);
+        }
+
+        public void RemoveVehicle(Vehicle vehilce)
+        {
+            context.Vehicles.Remove(vehilce);
+        }
+
+        public async Task<Vehicle> GetVehicle(int id, bool includeRelated = true)
+        {
+            if(!includeRelated)
+                return await context.Vehicles.FirstOrDefaultAsync(v => v.Id == id);
+                
+            return await context.Vehicles
+                .Include(v => v.Features)
+                    .ThenInclude(vf => vf.Feature)
+                .Include(v => v.Model)
+                    .ThenInclude(m => m.Make)
+                .SingleOrDefaultAsync(v => v.Id == id);
+        }
     }
 }
