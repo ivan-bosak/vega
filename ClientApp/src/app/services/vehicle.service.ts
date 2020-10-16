@@ -13,6 +13,10 @@ export class VehicleService {
   getMakes(){
     return this.http.get('/api/makes')
       .pipe(map(res => res.json()));
+  }
 
+  getFeatures(){
+    return this.http.get('/api/features')
+      .pipe(map(res => res.json()));
   }
 }
