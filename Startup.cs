@@ -27,7 +27,7 @@ namespace vega
             services.AddAutoMapper(typeof(Startup));
             
             services.AddDbContext<VegaDbContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
+                options => options.UseSqlite(Configuration.GetConnectionString("Default")));
 
             services.AddScoped<IRepository, VegaRepository>();  
             services.AddScoped<IUnitOfWork, UnitOfWork>();
