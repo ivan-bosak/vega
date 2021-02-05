@@ -1,0 +1,5 @@
+
+
+<h3 class="auto_title">{{ vehicle.make.name }} {{ vehicle.model.name }}</h3>
+<input type="file" (change)="uploadPhoto()" #fileInput>
+<app-image-slider [images]="photos"></app-image-slider>

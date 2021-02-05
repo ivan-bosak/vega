@@ -1,0 +1,9 @@
+<div class="slideshow-container">
+  <div *ngFor="let image of images" class="slide" id="image{{ images.indexOf(image) }}" [style.display]="images.indexOf(image) == slideIndex ? 'block' : 'none'">
+    <div class="numbertext">{{ images.indexOf(image) + 1 }} / {{ images.length }}</div>
+    <img src="/uploads/{{ image.fileName}}">
+  </div>
+   <!-- Next and previous buttons -->
+  <a class="prev" (click)="plusSlides(-1)"><span class="icon">&#10094;</span></a>
+  <a class="next" (click)="plusSlides(1)"><span class="icon">&#10095;</span></a>
+</div>

@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using vega.Core;
 using vega.Core.Models;
+using vega.Extensions;
 
 namespace vega.Persistence
 {
@@ -15,19 +18,20 @@ namespace vega.Persistence
             this.context = context;
         }
 
-        public async Task<IEnumerable<Make>> GetMakes()
+        public Task<List<Make>> GetMakes()
         {
-            return await context.Makes.Include(m => m.Models).ToListAsync();
+            //return Task.Run(() => context.Makes.Include(m => m.Models).ToListAsync());
+            return context.Makes.Include(m => m.Models).ToListAsync();
         }
 
-        public async Task<IEnumerable<Feature>> GetFeatures()
+        public Task<List<Feature>> GetFeatures()
         {
-            return await context.Features.ToListAsync();
+           return Task.Run(() => context.Features.ToListAsync());
         }
 
-        public async Task AddVehicle(Vehicle vehilce)
+        public Task AddVehicleAsync(Vehicle vehilce)
         {
-            await context.Vehicles.AddAsync(vehilce);
+            return Task.Run(() => context.Vehicles.AddAsync(vehilce));
         }
 
         public void RemoveVehicle(Vehicle vehilce)
@@ -35,17 +39,45 @@ namespace vega.Persistence
             context.Vehicles.Remove(vehilce);
         }
 
-        public async Task<Vehicle> GetVehicle(int id, bool includeRelated = true)
+        public Task<Vehicle> GetVehicleAsync(int id, bool includeRelated = true)
         {
             if(!includeRelated)
-                return await context.Vehicles.FirstOrDefaultAsync(v => v.Id == id);
+                return context.Vehicles.FirstOrDefaultAsync(v => v.Id == id);
                 
-            return await context.Vehicles
+            return context.Vehicles
                 .Include(v => v.Features)
                     .ThenInclude(vf => vf.Feature)
                 .Include(v => v.Model)
                     .ThenInclude(m => m.Make)
                 .SingleOrDefaultAsync(v => v.Id == id);
+        }
+        public async Task<QueryResult<Vehicle>> GetVehiclesAsync(VehicleQuery queryObj)
+        {
+            var queryResult = new QueryResult<Vehicle>();
+
+            var query = context.Vehicles
+                .Include(v => v.Features)
+                    .ThenInclude(vf => vf.Feature)
+                .Include(v => v.Model)
+                    .ThenInclude(m => m.Make)
+                .AsQueryable();
+
+            if(queryObj.MakeId.HasValue)
+                query = query.Where(v => v.Model.MakeId == queryObj.MakeId);
+
+            var columnsMap = new Dictionary<string, Expression<Func<Vehicle, object>>>()
+            {
+                ["make"] = v => v.Model.Make.Name,
+                ["model"] = v => v.Model.Name,
+                ["id"] = v => v.Id
+            };
+            
+            query = query.ApplyOrdering<Vehicle>(queryObj, columnsMap);
+            queryResult.TotalItems = await query.CountAsync();
+            query = query.ApplyPagination<Vehicle>(queryObj);
+            queryResult.Items = await query.ToListAsync();
+            
+            return queryResult;
         }
     }
 }
