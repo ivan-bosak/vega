@@ -6,10 +6,11 @@ namespace vega.Core
 {
     public interface IRepository
     {
-        Task<IEnumerable<Make>> GetMakes();
-        Task<IEnumerable<Feature>> GetFeatures();
-        Task AddVehicle(Vehicle vehicle);
+        Task<List<Make>> GetMakes();
+        Task<List<Feature>> GetFeatures();
+        Task AddVehicleAsync(Vehicle vehicle);
         void RemoveVehicle(Vehicle vehicle);
-        Task<Vehicle> GetVehicle(int id, bool includeRelated = true);
+        Task<Vehicle> GetVehicleAsync(int id, bool includeRelated = true);
+        Task<QueryResult<Vehicle>> GetVehiclesAsync(VehicleQuery queryObj);
     }
 }

@@ -1,0 +1,33 @@
+<div class="well">
+<div class="form-group">
+  <label for="make"></label>
+  <select name="make" id="make" class="form-control" [(ngModel)]="filter.makeId" (change)="onFilterChange()">
+    <option value="0">Select make</option>
+    <option *ngFor="let m of makes" value="{{ m.id }}">{{ m.name }}</option>
+  </select>
+</div>
+<button class="btn btn-default" type="button" (click)="resetFilter()">Reset</button>
+</div>
+<table class="table table-striped table-responsive-md btn-table">
+  <thead>
+    <tr>
+      <th># </th>
+      <th (click)="sortBy('make')">Make </th>
+      <th (click)="sortBy('model')">Model</th>
+      <th>Contact Name </th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let el of queryResult.items">
+      <th>{{el.id}}</th>
+      <td>{{el.make.name}}</td>
+      <td>{{el.model.name}}</td>
+      <td>{{el.contact.name}}</td>
+      <td>
+        <a [routerLink]="['/vehicles', el.id]" link="red">View</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<pagination [total-items]="queryResult.totalItems" [page-size]="filter.pageSize" (page-changed)="onPageChange($event)"></pagination>
