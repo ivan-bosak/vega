@@ -29,7 +29,7 @@ namespace vega
             services.AddAutoMapper(typeof(Startup));
             
             services.AddDbContext<VegaDbContext>(
-                options => options.UseSqlite(Configuration.GetConnectionString("Default")));
+                options => options.UseNpgsql(Configuration.GetConnectionString("Default")));
 
             services.AddScoped<IRepository, VegaRepository>(); 
             services.AddScoped<IPhotoRepository, PhotoReposritory>();   

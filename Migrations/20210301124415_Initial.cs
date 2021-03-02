@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Vega.Migrations
 {
@@ -12,7 +13,7 @@ namespace Vega.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -25,7 +26,7 @@ namespace Vega.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(maxLength: 255, nullable: false)
                 },
                 constraints: table =>
@@ -38,7 +39,7 @@ namespace Vega.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(maxLength: 255, nullable: false),
                     MakeId = table.Column<int>(nullable: false)
                 },
@@ -58,7 +59,7 @@ namespace Vega.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ModelId = table.Column<int>(nullable: false),
                     IsRegistered = table.Column<bool>(nullable: false),
                     LastUpdated = table.Column<DateTime>(nullable: false),
@@ -82,7 +83,7 @@ namespace Vega.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FileName = table.Column<string>(maxLength: 255, nullable: false),
                     VehicleId = table.Column<int>(nullable: true)
                 },
@@ -140,36 +141,6 @@ namespace Vega.Migrations
                 name: "IX_Vehicles_ModelId",
                 table: "Vehicles",
                 column: "ModelId");
-
-            migrationBuilder.Sql("INSERT INTO Makes (Name) VALUES ('Audi')");
-            migrationBuilder.Sql("INSERT INTO Makes (Name) VALUES ('BMW')");
-            migrationBuilder.Sql("INSERT INTO Makes (Name) VALUES ('Renault')");
-            migrationBuilder.Sql("INSERT INTO Makes (Name) VALUES ('Skoda')");
-            migrationBuilder.Sql("INSERT INTO Makes (Name) VALUES ('Volkswagen')");
-
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('A3', (SELECT ID FROM Makes WHERE Name = 'Audi'))");
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('A5', (SELECT ID FROM Makes WHERE Name = 'Audi'))");
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('A6', (SELECT ID FROM Makes WHERE Name = 'Audi'))");
-
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('Series 1', (SELECT ID FROM Makes WHERE Name = 'BMW'))");
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('Series 2', (SELECT ID FROM Makes WHERE Name = 'BMW'))");
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('Series 3', (SELECT ID FROM Makes WHERE Name = 'BMW'))");
-
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('Fleunce', (SELECT ID FROM Makes WHERE Name = 'Renault'))");
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('Kadjar', (SELECT ID FROM Makes WHERE Name = 'Renault'))");
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('Megan', (SELECT ID FROM Makes WHERE Name = 'Renault'))");
-
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('Kodiac', (SELECT ID FROM Makes WHERE Name = 'Skoda'))");
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('Ocatvia', (SELECT ID FROM Makes WHERE Name = 'Skoda'))");
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('Superb', (SELECT ID FROM Makes WHERE Name = 'Skoda'))");
-
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('Golf', (SELECT ID FROM Makes WHERE Name = 'Volkswagen'))");
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('Passat', (SELECT ID FROM Makes WHERE Name = 'Volkswagen'))");
-            migrationBuilder.Sql("INSERT INTO Models (Name, MakeID) VALUES ('Tiguan', (SELECT ID FROM Makes WHERE Name = 'Volkswagen'))");
-            migrationBuilder.Sql("INSERT INTO Features (Name) VALUES ('Hatchback')");
-            migrationBuilder.Sql("INSERT INTO Features (Name) VALUES ('Sedan')");
-            migrationBuilder.Sql("INSERT INTO Features (Name) VALUES ('Crossover')");
-            migrationBuilder.Sql("INSERT INTO Features (Name) VALUES ('Coupe')");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -191,10 +162,6 @@ namespace Vega.Migrations
 
             migrationBuilder.DropTable(
                 name: "Makes");
-            
-            
-            migrationBuilder.Sql("DELETE FROM Makes");
-            migrationBuilder.Sql("DELETE FROM Features");
         }
     }
 }
