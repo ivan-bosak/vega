@@ -1,5 +1,18 @@
 
 
 <h3 class="auto_title">{{ vehicle.make.name }} {{ vehicle.model.name }}</h3>
+<ul>
+    <li *ngFor="let f of vehicle.features" id="f.id">{{ f.name }}</li>
+</ul>
+<dl>
+    <dt>Name</dt>
+    <dd>{{ vehicle.contact.name }}</dd>
+
+    <dt>Phone</dt>
+    <dd>{{ vehicle.contact.phone }}</dd>
+
+    <dt>Email</dt>
+    <dd>{{ vehicle.contact.email }}</dd>
+</dl>
 <input type="file" (change)="uploadPhoto()" #fileInput>
 <app-image-slider [images]="photos"></app-image-slider>
