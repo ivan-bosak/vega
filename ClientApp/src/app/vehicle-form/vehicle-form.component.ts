@@ -54,7 +54,7 @@ export class VehicleFormComponent implements OnInit {
       this.features = data[1];
 
       if(this.vehicle.id){
-        this.setVehicle(data[2]);
+        this.setVehicle(data[2][0]);
         this.populateModels();
       }
     },
